@@ -45,6 +45,52 @@ function resetGame() {
   state.blocks = createBlocks();
 }
 
+const keys = { left: false, right: false };
+
+function setKey(e, pressed) {
+  if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = pressed;
+  else if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = pressed;
+  else return;
+  e.preventDefault();
+}
+
+window.addEventListener('keydown', (e) => setKey(e, true));
+window.addEventListener('keyup', (e) => setKey(e, false));
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = (e.clientX - rect.left) * (CONFIG.width / rect.width);
+  state.paddle.x = mouseX - CONFIG.paddle.w / 2;
+  clampPaddle();
+});
+
+function clampPaddle() {
+  state.paddle.x = Math.max(0, Math.min(CONFIG.width - CONFIG.paddle.w, state.paddle.x));
+}
+
+function stickBallToPaddle() {
+  state.ball.x = state.paddle.x + (CONFIG.paddle.w - CONFIG.ball.size) / 2;
+  state.ball.y = CONFIG.paddle.y - CONFIG.ball.size;
+}
+
+function update(dt) {
+  const dir = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+  state.paddle.x += dir * CONFIG.paddle.speed * dt;
+  clampPaddle();
+
+  if (state.phase === 'ready') stickBallToPaddle();
+}
+
+let lastTime = 0;
+
+function frame(time) {
+  const dt = Math.min((time - lastTime) / 1000, 0.05);
+  lastTime = time;
+  update(dt);
+  draw();
+  requestAnimationFrame(frame);
+}
+
 function draw() {
   ctx.clearRect(0, 0, CONFIG.width, CONFIG.height);
 
@@ -57,5 +103,8 @@ function draw() {
 
 loadSpritesheet(() => {
   resetGame();
-  draw();
+  requestAnimationFrame((time) => {
+    lastTime = time;
+    frame(time);
+  });
 });
