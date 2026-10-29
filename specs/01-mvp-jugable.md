@@ -1,6 +1,6 @@
 # SPEC 01 — MVP jugable de Arkanoid
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depende de:** ninguna
 > **Fecha:** 2026-10-29
 > **Objetivo:** Un Arkanoid de un solo nivel, jugable en el navegador con HTML, CSS y JavaScript sin dependencias, que use los sprites y sonidos existentes.
@@ -84,22 +84,22 @@ Convenciones:
 
 ## Criterios de aceptación
 
-- [ ] Abrir `index.html` (o servir la raíz con un servidor estático) carga el juego sin errores en la consola.
-- [ ] No existe ninguna dependencia externa: no hay `npm`, CDN ni librerías.
-- [ ] Se dibujan 60 bloques en 6 filas × 10 columnas de colores distintos, usando el spritesheet.
-- [ ] La pala se mueve con las flechas, con A/D y con el ratón, y no sale del canvas.
-- [ ] La bola empieza pegada a la pala y solo se lanza con espacio o clic.
-- [ ] La bola rebota en paredes laterales, techo y pala, y mantiene la misma velocidad en todo momento.
-- [ ] El rebote es determinista: el mismo lanzamiento y las mismas posiciones de pala producen siempre la misma trayectoria. Un golpe al centro de la pala sale en vertical y un golpe de lado a un bloque invierte solo `vx`.
-- [ ] Al golpear la pala cerca del borde izquierdo la bola sale hacia la izquierda, y cerca del borde derecho hacia la derecha.
-- [ ] Romper un bloque suma exactamente 10 puntos y el bloque deja de colisionar.
-- [ ] Si la bola cae por abajo se pierde una vida, el HUD lo refleja y la bola vuelve a la pala.
-- [ ] Con 0 vidas aparece un overlay "Game Over" sobre el canvas, y espacio o clic reinicia la partida con 3 vidas, 0 puntos y los 60 bloques.
-- [ ] Al romper los 60 bloques aparece un overlay de victoria con 600 puntos, y espacio o clic reinicia la partida.
-- [ ] Todo el juego ocurre en una única página y un único canvas, sin navegar ni mostrar otras pantallas.
-- [ ] El juego implementa `ball-bounce.mp3` en cada rebote y `break-sound.mp3` en cada bloque roto, pero quedan desactivados por defecto (`SOUND_ENABLED = false` en `game.js`) por decisión del usuario; al ponerlo en `true` suenan.
-- [ ] Cada bloque roto desaparece al instante, sin animación.
-- [ ] Los assets existentes no se tocan salvo la línea de la ruta del PNG en `spritesheet.js`; el código propio (`style.css`, `game.js`) vive en `assets/css/` y `assets/js/`.
+- [x] Abrir `index.html` (o servir la raíz con un servidor estático) carga el juego sin errores en la consola.
+- [x] No existe ninguna dependencia externa: no hay `npm`, CDN ni librerías.
+- [x] Se dibujan 60 bloques en 6 filas × 10 columnas de colores distintos, usando el spritesheet.
+- [x] La pala se mueve con las flechas, con A/D y con el ratón, y no sale del canvas.
+- [x] La bola empieza pegada a la pala y solo se lanza con espacio o clic.
+- [x] La bola rebota en paredes laterales, techo y pala, y mantiene la misma velocidad en todo momento.
+- [x] El rebote es determinista: el mismo lanzamiento y las mismas posiciones de pala producen siempre la misma trayectoria. Un golpe al centro de la pala sale en vertical y un golpe de lado a un bloque invierte solo `vx`.
+- [x] Al golpear la pala cerca del borde izquierdo la bola sale hacia la izquierda, y cerca del borde derecho hacia la derecha.
+- [x] Romper un bloque suma exactamente 10 puntos y el bloque deja de colisionar.
+- [x] Si la bola cae por abajo se pierde una vida, el HUD lo refleja y la bola vuelve a la pala.
+- [x] Con 0 vidas aparece un overlay "Game Over" sobre el canvas, y espacio o clic reinicia la partida con 3 vidas, 0 puntos y los 60 bloques.
+- [x] Al romper los 60 bloques aparece un overlay de victoria con 600 puntos, y espacio o clic reinicia la partida.
+- [x] Todo el juego ocurre en una única página y un único canvas, sin navegar ni mostrar otras pantallas.
+- [x] El juego implementa `ball-bounce.mp3` en cada rebote y `break-sound.mp3` en cada bloque roto, pero quedan desactivados por defecto (`SOUND_ENABLED = false` en `game.js`) por decisión del usuario; al ponerlo en `true` suenan.
+- [x] Cada bloque roto desaparece al instante, sin animación.
+- [x] Los assets existentes no se tocan salvo la línea de la ruta del PNG en `spritesheet.js`; el código propio (`style.css`, `game.js`) vive en `assets/css/` y `assets/js/`.
 
 ## Decisiones
 

@@ -4,7 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Estado del proyecto
 
-Arkanoid/Breakout en navegador (canvas 2D, JS vanilla). Hoy el repo contiene solo assets y skills: no hay `index.html`, código de juego, build, linter ni tests. No existen comandos de build/test. No es un repo git.
+Arkanoid/Breakout en navegador (canvas 2D, JS vanilla). El MVP (`specs/01-mvp-jugable.md`, estado Implementado) está hecho: un nivel de 6×10 bloques en un canvas de 800×600, con pala, bola, vidas, puntos y overlays de victoria y game over. No hay build, linter ni tests.
+
+- Estructura: `index.html` en la raíz, `assets/css/style.css`, `assets/js/game.js` (todo el juego) y `assets/assets/spritesheet.js` (con la ruta del PNG ajustada).
+- Para jugar, sirve la raíz con `python -m http.server` y abre `http://localhost:8000`.
+- Los sonidos están implementados pero desactivados: `SOUND_ENABLED = false` en `game.js`.
+- Es un repo git. Las specs se implementan en ramas `spec-NN-slug`.
 
 Requisito del `README.cmd` (es el README del proyecto, pese a la extensión): juego hecho con HTML, CSS y JavaScript, **cero dependencias** (sin npm, frameworks ni librerías externas), jugable por cualquiera en el navegador.
 
