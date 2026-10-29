@@ -11,7 +11,7 @@
 
 **Dentro:**
 
-- `index.html` en la raíz del proyecto, con `style.css` y `game.js`, sin dependencias externas ni build.
+- `index.html` en la raíz del proyecto, con `assets/css/style.css` y `assets/js/game.js`, sin dependencias externas ni build.
 - Canvas 2D de 800×600 px, centrado en la página.
 - Un nivel de 6 filas × 10 columnas (60 bloques de 80×40 px, que llenan los 800 px de ancho y mantienen la proporción 2:1 del sprite). Cada fila tiene un color: `red`, `yellow`, `cyan`, `magenta`, `green`, `hotpink`. Cada bloque se rompe de 1 golpe.
 - Pala controlada con teclado (flechas o A/D) y con ratón.
@@ -35,7 +35,7 @@
 
 ## Modelo de datos
 
-Estructuras nuevas, todas en `game.js`. Coordenadas con origen arriba a la izquierda y velocidades en píxeles por segundo (se usa `dt` en segundos).
+Estructuras nuevas, todas en `assets/js/game.js`. Coordenadas con origen arriba a la izquierda y velocidades en píxeles por segundo (se usa `dt` en segundos).
 
 ```js
 const CONFIG = {
@@ -73,8 +73,8 @@ Convenciones:
 
 ## Plan de implementación
 
-1. Cambiar la ruta del PNG en `assets/assets/spritesheet.js` (línea `rawImg.src`) a `assets/assets/spritesheet-breakout.png`. Crear `index.html` y `style.css` con el canvas y cargar `spritesheet.js` y `game.js`. Prueba manual: la página abre sin errores en la consola.
-2. En `game.js`, arrancar con `loadSpritesheet(...)` y dibujar pala, bola y los 60 bloques con `drawSprite`. Prueba manual: se ve la cuadrícula de 6 colores.
+1. Cambiar la ruta del PNG en `assets/assets/spritesheet.js` (línea `rawImg.src`) a `assets/assets/spritesheet-breakout.png`. Crear `index.html` (raíz), `assets/css/style.css` y `assets/js/game.js` con el canvas, y cargar `spritesheet.js` y `game.js`. Prueba manual: la página abre sin errores en la consola.
+2. En `assets/js/game.js`, arrancar con `loadSpritesheet(...)` y dibujar pala, bola y los 60 bloques con `drawSprite`. Prueba manual: se ve la cuadrícula de 6 colores.
 3. Añadir el bucle con `requestAnimationFrame` y `dt`, el movimiento de la pala con teclado y ratón (limitada a los bordes) y la bola pegada a la pala. Prueba manual: la pala se mueve con ambos controles.
 4. Añadir el lanzamiento (espacio o clic), el movimiento de la bola y el rebote en paredes y techo. Prueba manual: la bola rebota en los tres bordes.
 5. Añadir el rebote en la pala con la fórmula de ángulo de la sección Modelo de datos y la pérdida de vida cuando la bola cae por abajo, con vuelta a `ready`. Prueba manual: el ángulo cambia según dónde toque la pala, y al caer se pierde una vida.
@@ -99,13 +99,13 @@ Convenciones:
 - [ ] Todo el juego ocurre en una única página y un único canvas, sin navegar ni mostrar otras pantallas.
 - [ ] Suena `ball-bounce.mp3` en cada rebote y `break-sound.mp3` en cada bloque roto.
 - [ ] Cada bloque roto desaparece al instante, sin animación.
-- [ ] La única modificación en `assets/` es la línea de la ruta del PNG en `spritesheet.js`.
+- [ ] Los assets existentes no se tocan salvo la línea de la ruta del PNG en `spritesheet.js`; el código propio (`style.css`, `game.js`) vive en `assets/css/` y `assets/js/`.
 
 ## Decisiones
 
 - **Sí:** `index.html` en la raíz y una línea cambiada en `spritesheet.js`. Es el cambio mínimo y evita mover assets.
 - **No:** mover los assets a otra carpeta. Rompería la estructura entregada.
-- **Sí:** tres archivos (`index.html`, `style.css`, `game.js`). Es simple y cumple el requisito de no tener build.
+- **Sí:** tres archivos (`index.html` en la raíz, `assets/css/style.css`, `assets/js/game.js`). Es simple, cumple el requisito de no tener build y mantiene el código dentro de `assets/` en carpetas por tipo.
 - **Sí:** un nivel, 3 vidas y 10 puntos fijos por bloque. Es lo mínimo para que se sienta un juego completo.
 - **Sí:** teclado y ratón a la vez. No cuesta casi nada y cualquiera puede jugar.
 - **Sí:** ángulo de rebote según el punto de impacto en la pala y velocidad constante. Es el rebote clásico y es predecible.
