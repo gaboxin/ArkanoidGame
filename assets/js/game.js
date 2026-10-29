@@ -108,6 +108,37 @@ function bounceWalls() {
   }
 }
 
+function bouncePaddle() {
+  const ball = state.ball;
+  const { w, h, y } = CONFIG.paddle;
+  const size = CONFIG.ball.size;
+  const px = state.paddle.x;
+
+  const overlaps = ball.vy > 0
+    && ball.y + size >= y && ball.y < y + h
+    && ball.x + size > px && ball.x < px + w;
+  if (!overlaps) return;
+
+  // -1 en el borde izquierdo, 0 en el centro, 1 en el borde derecho
+  const offset = Math.max(-1, Math.min(1, (ball.x + size / 2 - (px + w / 2)) / (w / 2)));
+  const angle = offset * CONFIG.ball.maxBounceAngle * Math.PI / 180;
+  ball.vx = CONFIG.ball.speed * Math.sin(angle);
+  ball.vy = -CONFIG.ball.speed * Math.cos(angle);
+  ball.y = y - size;
+}
+
+function loseLife() {
+  state.lives--;
+  state.ball.vx = 0;
+  state.ball.vy = 0;
+  if (state.lives <= 0) {
+    state.phase = 'lost';
+  } else {
+    state.phase = 'ready';
+    stickBallToPaddle();
+  }
+}
+
 function moveBall(dt) {
   const ball = state.ball;
   const dist = Math.hypot(ball.vx, ball.vy) * dt;
@@ -117,6 +148,11 @@ function moveBall(dt) {
     ball.x += ball.vx * stepDt;
     ball.y += ball.vy * stepDt;
     bounceWalls();
+    bouncePaddle();
+    if (ball.y > CONFIG.height) {
+      loseLife();
+      return;
+    }
   }
 }
 
