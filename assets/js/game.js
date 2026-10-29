@@ -57,7 +57,12 @@ function setKey(e, pressed) {
 const LAUNCH_ANGLE = 20; // grados desde la vertical, siempre hacia la derecha (determinista)
 const MAX_STEP = 4;      // px máximos que avanza la bola por subpaso (evita tunneling)
 
+// espacio o clic: lanza la bola en 'ready' y reinicia la partida en 'won' / 'lost'
 function launchBall() {
+  if (state.phase === 'won' || state.phase === 'lost') {
+    resetGame();
+    return;
+  }
   if (state.phase !== 'ready') return;
   const a = LAUNCH_ANGLE * Math.PI / 180;
   state.ball.vx = CONFIG.ball.speed * Math.sin(a);
@@ -219,6 +224,26 @@ function draw() {
   drawSprite(ctx, 'paddle', state.paddle.x, CONFIG.paddle.y, CONFIG.paddle.w, CONFIG.paddle.h);
   drawSprite(ctx, 'ball', state.ball.x, state.ball.y, CONFIG.ball.size, CONFIG.ball.size);
   drawHud();
+  if (state.phase === 'won' || state.phase === 'lost') drawOverlay();
+}
+
+function drawOverlay() {
+  const won = state.phase === 'won';
+  const cx = CONFIG.width / 2;
+  const cy = CONFIG.height / 2;
+
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = 'bold 56px monospace';
+  ctx.fillText(won ? '¡Victoria!' : 'Game Over', cx, cy - 50);
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText('Puntos: ' + state.score, cx, cy + 10);
+  ctx.font = '20px monospace';
+  ctx.fillText('Espacio o clic para jugar de nuevo', cx, cy + 60);
 }
 
 function drawHud() {
