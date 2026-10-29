@@ -97,7 +97,7 @@ Convenciones:
 - [ ] Con 0 vidas aparece un overlay "Game Over" sobre el canvas, y espacio o clic reinicia la partida con 3 vidas, 0 puntos y los 60 bloques.
 - [ ] Al romper los 60 bloques aparece un overlay de victoria con 600 puntos, y espacio o clic reinicia la partida.
 - [ ] Todo el juego ocurre en una única página y un único canvas, sin navegar ni mostrar otras pantallas.
-- [ ] Suena `ball-bounce.mp3` en cada rebote y `break-sound.mp3` en cada bloque roto.
+- [ ] El juego implementa `ball-bounce.mp3` en cada rebote y `break-sound.mp3` en cada bloque roto, pero quedan desactivados por defecto (`SOUND_ENABLED = false` en `game.js`) por decisión del usuario; al ponerlo en `true` suenan.
 - [ ] Cada bloque roto desaparece al instante, sin animación.
 - [ ] Los assets existentes no se tocan salvo la línea de la ruta del PNG en `spritesheet.js`; el código propio (`style.css`, `game.js`) vive en `assets/css/` y `assets/js/`.
 

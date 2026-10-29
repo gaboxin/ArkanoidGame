@@ -97,20 +97,40 @@ function stickBallToPaddle() {
   state.ball.y = CONFIG.paddle.y - CONFIG.ball.size;
 }
 
+const SOUND_ENABLED = false; // sonidos desactivados; poner true para reactivarlos
+
+const sounds = {
+  bounce: { audio: new Audio('assets/assets/sounds/ball-bounce.mp3'), volume: 1 },
+  brick:  { audio: new Audio('assets/assets/sounds/break-sound.mp3'),  volume: 0.25 },
+};
+
+// se clona el Audio para que varios sonidos solapados no se corten entre sí
+function playSound(sound) {
+  if (!SOUND_ENABLED) return;
+  const clone = sound.audio.cloneNode();
+  clone.volume = sound.volume; // cloneNode no copia el volumen
+  clone.play().catch(() => {});
+}
+
 function bounceWalls() {
   const ball = state.ball;
   const max = CONFIG.width - CONFIG.ball.size;
+  let bounced = false;
   if (ball.x < 0) {
     ball.x = 0;
     ball.vx = Math.abs(ball.vx);
+    bounced = true;
   } else if (ball.x > max) {
     ball.x = max;
     ball.vx = -Math.abs(ball.vx);
+    bounced = true;
   }
   if (ball.y < 0) {
     ball.y = 0;
     ball.vy = Math.abs(ball.vy);
+    bounced = true;
   }
+  if (bounced) playSound(sounds.bounce);
 }
 
 function bouncePaddle() {
@@ -130,6 +150,7 @@ function bouncePaddle() {
   ball.vx = CONFIG.ball.speed * Math.sin(angle);
   ball.vy = -CONFIG.ball.speed * Math.cos(angle);
   ball.y = y - size;
+  playSound(sounds.bounce);
 }
 
 function bounceBlocks() {
@@ -156,6 +177,7 @@ function bounceBlocks() {
 
     b.alive = false;
     state.score += CONFIG.pointsPerBlock;
+    playSound(sounds.brick);
     if (state.blocks.every((blk) => !blk.alive)) {
       state.phase = 'won';
       ball.vx = 0;
