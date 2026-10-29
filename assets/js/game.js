@@ -127,6 +127,39 @@ function bouncePaddle() {
   ball.y = y - size;
 }
 
+function bounceBlocks() {
+  const ball = state.ball;
+  const size = CONFIG.ball.size;
+  const { w, h } = CONFIG.block;
+
+  for (const b of state.blocks) {
+    if (!b.alive) continue;
+    const overlapX = Math.min(ball.x + size, b.x + w) - Math.max(ball.x, b.x);
+    const overlapY = Math.min(ball.y + size, b.y + h) - Math.max(ball.y, b.y);
+    if (overlapX <= 0 || overlapY <= 0) continue;
+
+    // rebote especular en el eje de menor penetración (empate: vertical)
+    if (overlapX < overlapY) {
+      const fromLeft = ball.x + size / 2 < b.x + w / 2;
+      ball.x += fromLeft ? -overlapX : overlapX;
+      ball.vx = fromLeft ? -Math.abs(ball.vx) : Math.abs(ball.vx);
+    } else {
+      const fromTop = ball.y + size / 2 < b.y + h / 2;
+      ball.y += fromTop ? -overlapY : overlapY;
+      ball.vy = fromTop ? -Math.abs(ball.vy) : Math.abs(ball.vy);
+    }
+
+    b.alive = false;
+    state.score += CONFIG.pointsPerBlock;
+    if (state.blocks.every((blk) => !blk.alive)) {
+      state.phase = 'won';
+      ball.vx = 0;
+      ball.vy = 0;
+    }
+    return; // solo se rompe un bloque por subpaso
+  }
+}
+
 function loseLife() {
   state.lives--;
   state.ball.vx = 0;
@@ -149,6 +182,8 @@ function moveBall(dt) {
     ball.y += ball.vy * stepDt;
     bounceWalls();
     bouncePaddle();
+    bounceBlocks();
+    if (state.phase !== 'playing') return;
     if (ball.y > CONFIG.height) {
       loseLife();
       return;
@@ -183,6 +218,17 @@ function draw() {
   }
   drawSprite(ctx, 'paddle', state.paddle.x, CONFIG.paddle.y, CONFIG.paddle.w, CONFIG.paddle.h);
   drawSprite(ctx, 'ball', state.ball.x, state.ball.y, CONFIG.ball.size, CONFIG.ball.size);
+  drawHud();
+}
+
+function drawHud() {
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 22px monospace';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'left';
+  ctx.fillText('Puntos: ' + state.score, 16, 40);
+  ctx.textAlign = 'right';
+  ctx.fillText('Vidas: ' + state.lives, CONFIG.width - 16, 40);
 }
 
 loadSpritesheet(() => {
