@@ -54,8 +54,27 @@ function setKey(e, pressed) {
   e.preventDefault();
 }
 
-window.addEventListener('keydown', (e) => setKey(e, true));
+const LAUNCH_ANGLE = 20; // grados desde la vertical, siempre hacia la derecha (determinista)
+const MAX_STEP = 4;      // px máximos que avanza la bola por subpaso (evita tunneling)
+
+function launchBall() {
+  if (state.phase !== 'ready') return;
+  const a = LAUNCH_ANGLE * Math.PI / 180;
+  state.ball.vx = CONFIG.ball.speed * Math.sin(a);
+  state.ball.vy = -CONFIG.ball.speed * Math.cos(a);
+  state.phase = 'playing';
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (!e.repeat) launchBall();
+    return;
+  }
+  setKey(e, true);
+});
 window.addEventListener('keyup', (e) => setKey(e, false));
+canvas.addEventListener('mousedown', launchBall);
 
 canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
@@ -73,12 +92,41 @@ function stickBallToPaddle() {
   state.ball.y = CONFIG.paddle.y - CONFIG.ball.size;
 }
 
+function bounceWalls() {
+  const ball = state.ball;
+  const max = CONFIG.width - CONFIG.ball.size;
+  if (ball.x < 0) {
+    ball.x = 0;
+    ball.vx = Math.abs(ball.vx);
+  } else if (ball.x > max) {
+    ball.x = max;
+    ball.vx = -Math.abs(ball.vx);
+  }
+  if (ball.y < 0) {
+    ball.y = 0;
+    ball.vy = Math.abs(ball.vy);
+  }
+}
+
+function moveBall(dt) {
+  const ball = state.ball;
+  const dist = Math.hypot(ball.vx, ball.vy) * dt;
+  const steps = Math.max(1, Math.ceil(dist / MAX_STEP));
+  const stepDt = dt / steps;
+  for (let i = 0; i < steps; i++) {
+    ball.x += ball.vx * stepDt;
+    ball.y += ball.vy * stepDt;
+    bounceWalls();
+  }
+}
+
 function update(dt) {
   const dir = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
   state.paddle.x += dir * CONFIG.paddle.speed * dt;
   clampPaddle();
 
   if (state.phase === 'ready') stickBallToPaddle();
+  else if (state.phase === 'playing') moveBall(dt);
 }
 
 let lastTime = 0;
