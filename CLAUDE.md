@@ -8,7 +8,7 @@ Arkanoid/Breakout en navegador (canvas 2D, JS vanilla). El MVP (`specs/01-mvp-ju
 
 Requisito del `README.cmd` (es el README del proyecto, pese a la extensión): juego hecho con HTML, CSS y JavaScript, **cero dependencias** (sin npm, frameworks ni librerías externas), jugable por cualquiera en el navegador.
 
-- Para jugar, sirve la raíz con `python -m http.server` y abre `http://localhost:8000`.
+- Para jugar basta abrir `index.html` en el navegador (funciona con `file://`: sin módulos, `fetch` ni lectura de píxeles del canvas). Mantener esa propiedad: no introducir `type="module"`, `fetch` ni `getImageData`. Opcionalmente, `python -m http.server` y `http://localhost:8000`.
 - Es un repo git. Rama principal `main`; cada spec se implementa en una rama `spec-NN-slug` (existe `spec-01-mvp-jugable`).
 
 ## Estructura

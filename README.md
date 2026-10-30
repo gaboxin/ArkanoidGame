@@ -4,13 +4,9 @@ Juego de Arkanoid/Breakout para el navegador, hecho con HTML, CSS y JavaScript, 
 
 ## Cómo jugar
 
-Sirve la raíz del proyecto con un servidor estático y abre el juego:
+No necesitas servidor ni instalar nada: abre `index.html` en tu navegador (doble clic).
 
-```bash
-python -m http.server
-```
-
-Luego abre `http://localhost:8000`.
+Si prefieres servirlo igualmente, también funciona con `python -m http.server` y `http://localhost:8000`.
 
 ### Controles
 
